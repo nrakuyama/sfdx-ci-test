@@ -1,6 +1,8 @@
 name: Create scratch org
 
 on:
+  workflow_dispatch:
+
   pull_request:
     branches:
       - main
@@ -29,3 +31,4 @@ jobs:
           node -v
           npm -v
           sf -v
+          sf -h
