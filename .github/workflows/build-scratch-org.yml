@@ -18,6 +18,14 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Node
-        run: npm --v
+      - name: Setup Salesforce CLI
         shell: bash
+        run: npm i @salesforce/cli -g
+
+      - name: Result
+        shell: bash
+        run: |
+          printenv PATH
+          node -v
+          npm -v
+          sf -v
