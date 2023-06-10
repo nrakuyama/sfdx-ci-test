@@ -1,18 +1,18 @@
-# Salesforce DX Project: Next Steps
+# GitHub Actions workflow for Salesforce CI
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+## 概要
 
-## How Do You Plan to Deploy Your Changes?
+- GitHub Actions にて Salesforce のスクラッチ組織の自動作成・デプロイを行う
+- 発火するイベントは以下の通り
+  - プルリクエストを open: スクラッチ組織の作成・デプロイ
+  - プルリクエストブランチへ push: 作成済みスクラッチ組織への差分デプロイ
+  - プルリクエストを close: スクラッチ組織の削除
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## 使用方法
 
-## Configure Your Salesforce DX Project
+## 設定関連
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+### CI 実行権限
 
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+- DevHub の Salesforce ユーザの認証情報を Github 上に保管してビルドを行う
+- CI 用の接続アプリケーションに対して **プロファイル**, **権限セット**を指定して実行ユーザを制限できる

@@ -46,7 +46,12 @@ jobs:
       - name: Result
         shell: bash
         run: |
-          printenv PATH
-          node -v
-          npm -v
-          sf -v
+          which node
+          which npm
+          which sf
+          git branch
+
+      - name: Authenticate DevHub
+        shell: bash
+        run: |
+          curl -X POST "${{ secrets.INSTANCE_URL }}/services/oauth2/token?grant_type=client_credentials&client_id=${{ secrets.CLIENT_ID }}&client_secret=${{ secrets.CLIENT_SECRET }}"
