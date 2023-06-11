@@ -56,6 +56,6 @@ jobs:
         run: |
           access_token = $(\
             curl -X POST "${{ secrets.INSTANCE_URL }}/services/oauth2/token?grant_type=client_credentials&client_id=${{ secrets.CLIENT_ID }}&client_secret=${{ secrets.CLIENT_SECRET }}" |\
-            jq -r .access_token
+            jq -r .access_token\
           )
           sf org create scratch -f config/project-scratch-def.json --target-dev-hub ${access_token} --alias scratch
