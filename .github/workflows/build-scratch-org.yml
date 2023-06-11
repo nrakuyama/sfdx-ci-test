@@ -46,9 +46,7 @@ jobs:
       - name: Result
         shell: bash
         run: |
-          which node
-          which npm
-          which sf
+          pwd
           git branch
 
       - name: Authenticate DevHub
