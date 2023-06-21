@@ -54,5 +54,4 @@ jobs:
         run: |
           mkdir ./temp
           echo -n ${{ secrets.SECRET_KEY }} | base64 -d > ./temp/server.key
-          cat ./temp/server.key
-          sf org login jwt -r ${{ secrets.INSTANCE_URL }} -i ${{ secrets.CLIENT_ID }} -f ./temp/server.key
+          sf org login jwt -r ${{ secrets.INSTANCE_URL }} -o ${{ secrets.INTEGRATION_USERNAME }} -i ${{ secrets.CLIENT_ID }} -f ./temp/server.key
