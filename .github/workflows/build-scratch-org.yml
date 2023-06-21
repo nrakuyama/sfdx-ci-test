@@ -39,22 +39,18 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Make temp directory
+        shell: bash
+        run: mkdir ./temp
+
       - name: Setup Salesforce CLI
         shell: bash
         run: npm i @salesforce/cli -g
 
-      - name: Result
-        shell: bash
-        run: |
-          pwd
-          git branch
-
       - name: Authenticate DevHub
         shell: bash
         run: |
-          mkdir ./temp
           echo -n ${{ secrets.SECRET_KEY }} | base64 -d > ./temp/server.key
-          sf org login jwt -r ${{ secrets.INSTANCE_URL }} -o ${{ secrets.INTEGRATION_USERNAME }} -i ${{ secrets.CLIENT_ID }} -f ./temp/server.key -a devhub -d
-          sf org display -o devhub
-          sf org create scratch -f config/project-scratch-def.json -a scratch -d 30 -w 15
+          sf org login jwt -r ${{ secrets.INSTANCE_URL }} -o ${{ secrets.INTEGRATION_USERNAME }} -i ${{ secrets.CLIENT_ID }} -f ./temp/server.key -a devhub
+          sf org create scratch -f config/project-scratch-def.json -v devhub -a scratch -d 30 -w 15
           sf org display -o scratch
