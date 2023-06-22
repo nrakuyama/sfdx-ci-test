@@ -43,7 +43,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/apex/test-result-codecoverage.json
+          files: ./coverage/apex-coverage/test-result-codecoverage.json
           fail_ci_if_error: true
           flags: unittests
           verbose: true
