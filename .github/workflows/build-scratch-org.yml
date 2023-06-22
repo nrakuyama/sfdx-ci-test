@@ -34,3 +34,16 @@ jobs:
       - name: Create scratch org
         shell: bash
         run: ./scripts/setup_scratch.sh devhub scratch -y 30 -w 15 --json
+
+      - name: Report apex test coverage
+        shell: bash
+        run: sf apex run test -c -r human -d ./temp/apex-coverage -o scratch -w 20
+
+      - name: Upload Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/apex/test-result-codecoverage.json
+          fail_ci_if_error: true
+          flags: unittests
+          verbose: true
