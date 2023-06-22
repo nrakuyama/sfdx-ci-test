@@ -1,0 +1,15 @@
+runs:
+  using: Composite
+  steps:
+    - name: Make temp directory
+      shell: bash
+      run: mkdir ./temp
+
+    - name: Setup Nodejs
+      uses: actions/setup-node@v3
+      with:
+        node-version: lts/*
+
+    - name: Setup Salesforce CLI
+      shell: bash
+      run: npm i @salesforce/cli -g
