@@ -30,5 +30,7 @@ jobs:
         run: |
           echo -n ${{ secrets.SECRET_KEY }} | base64 -d > ./temp/server.key
           sf org login jwt -r ${{ secrets.INSTANCE_URL }} -o ${{ secrets.INTEGRATION_USERNAME }} -i ${{ secrets.CLIENT_ID }} -f ./temp/server.key -a devhub
-          sf org create scratch -f config/project-scratch-def.json -v devhub -a scratch -y 30 -w 15 --json
-          sf org display -o scratch
+
+      - name: Create scratch org
+        shell: bash
+        run: ./scripts/setup_scratch.sh devhub scratch -d 30 -w 15 --json
