@@ -1,12 +1,9 @@
-name: Create scratch org
+name: Scratch org build
 
 on:
   workflow_dispatch:
 
   pull_request:
-    branches:
-      - main
-      - feature/**
 
 jobs:
   scratch-org-test:
