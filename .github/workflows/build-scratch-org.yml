@@ -37,13 +37,16 @@ jobs:
 
       - name: Report apex test coverage
         shell: bash
-        run: sf apex run test -c -r human -d ./temp/apex-coverage -o scratch -w 20
+        run: |
+          sf apex run test -c -r human -d ./temp/apex-coverage -o scratch -w 20
+          ls ./temp/apex-coverage
+          ls ./temp
 
       - name: Upload Test Coverage
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/apex-coverage/test-result-codecoverage.json
+          files: ./temp/apex-coverage/test-result-codecoverage.json
           fail_ci_if_error: true
           flags: unittests
           verbose: true
