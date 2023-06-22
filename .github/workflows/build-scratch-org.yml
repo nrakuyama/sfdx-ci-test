@@ -33,4 +33,4 @@ jobs:
 
       - name: Create scratch org
         shell: bash
-        run: ./scripts/setup_scratch.sh devhub scratch -d 30 -w 15 --json
+        run: ./scripts/setup_scratch.sh devhub scratch -y 30 -w 15 --json
