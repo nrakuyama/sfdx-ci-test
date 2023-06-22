@@ -12,11 +12,11 @@ jobs:
   scratch-org-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump
-        uses: ./.github/actions/dump
-
       - name: Checkout source code
         uses: actions/checkout@v3
+
+      - name: Dump
+        uses: ./.github/actions/dump
 
       - name: Setup Nodejs
         uses: actions/setup-node@v3
