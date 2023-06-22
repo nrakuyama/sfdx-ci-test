@@ -1,10 +1,6 @@
 runs:
   using: Composite
   steps:
-    - name: Make temp directory
-      shell: bash
-      run: mkdir ./temp
-
     - name: Setup Nodejs
       uses: actions/setup-node@v3
       with:

@@ -18,6 +18,13 @@ jobs:
       - name: Dump
         uses: ./.github/actions/dump
 
+      - name: Make temp directory
+        shell: bash
+        run: mkdir ./temp
+
+      - name: Setup Salesforce CLI
+        uses: ./.github/actions/setup-sf
+
       - name: Authenticate DevHub
         shell: bash
         run: |
