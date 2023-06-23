@@ -31,12 +31,12 @@ jobs:
           ./scripts/setup_scratch.sh devhub scratch -y 30 -w 15 --json
           sf org display -o scratch | jq -r .result.username > ./temp/username
 
-      - name: Store scratch org user info
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ github.event.pull_request.number }}
-          path: ./temp/username
+      #      - name: Store scratch org user info
+      #        if: ${{ github.event_name == 'pull_request' }}
+      #        uses: actions/upload-artifact@v3
+      #        with:
+      #          name: ${{ github.event.pull_request.number }}
+      #          path: ./temp/username
 
       - name: Report apex test coverage
         shell: bash
