@@ -6,10 +6,11 @@ on:
   pull_request:
 
 jobs:
-  scratch-org-test:
+  build-scratch-org:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened') }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
+      - name: Checkout HEAD
         uses: actions/checkout@v3
 
       - name: Dump
@@ -22,15 +23,20 @@ jobs:
       - name: Setup Salesforce CLI
         uses: ./.github/actions/setup-sf
 
-      - name: Authenticate DevHub
+      - name: Build scratch org
         shell: bash
         run: |
           echo -n ${{ secrets.SECRET_KEY }} | base64 -d > ./temp/server.key
           sf org login jwt -r ${{ secrets.INSTANCE_URL }} -o ${{ secrets.INTEGRATION_USERNAME }} -i ${{ secrets.CLIENT_ID }} -f ./temp/server.key -a devhub
+          ./scripts/setup_scratch.sh devhub scratch -y 30 -w 15 --json
+          sf org display -o scratch | jq -r .result.username > ./temp/username
 
-      - name: Create scratch org
-        shell: bash
-        run: ./scripts/setup_scratch.sh devhub scratch -y 30 -w 15 --json
+      - name: Store scratch org user info
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.pull_request.number }}
+          path: ./temp/username
 
       - name: Report apex test coverage
         shell: bash
@@ -45,5 +51,49 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./temp/apex-coverage/test-result-codecoverage.json
           fail_ci_if_error: true
-          flags: unittests
+          verbose: true
+
+  deploy-diff-source:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'synchronize' }}
+    steps:
+      - name: Checkout before push
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.before }}
+
+      - name: Dump
+        uses: ./.github/actions/dump
+
+      - name: Make temp directory
+        shell: bash
+        run: mkdir ./temp
+
+      - name: Setup Salesforce CLI
+        uses: ./.github/actions/setup-sf
+
+      - name: Reset source tracking
+        shell: bash
+        run: sf project reset tracking
+
+      - name: Checkout after push
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.after }}
+
+      - name: Deploy source diff
+        shell: bash
+        run: sf project deploy start
+
+      - name: Report apex test coverage
+        shell: bash
+        run: |
+          sf apex run test -c -r human -d ./temp/apex-coverage -o scratch -w 20
+
+      - name: Upload Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./temp/apex-coverage/test-result-codecoverage.json
+          fail_ci_if_error: true
           verbose: true
